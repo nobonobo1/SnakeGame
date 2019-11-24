@@ -14,7 +14,7 @@ function Game() {
 	this.snakeSetColor = 'green';
 	this.snakeUnsetColor = 'clearGreen';
 	this.snakeDirection = 'ArrowRight';
-	this.movingInterval = 275;
+	this.timeInterval = 250;
 
 	// Initial apple settings:
 	this.appleRow = randomIntFromInterval(1, this.rowQuantity);
@@ -33,16 +33,13 @@ function Game() {
 		);
 		self.matrix.create();
 
-/*		// Creating snake by its settings
+		// Creating snake by its settings
 		self.snake = new Snake (
 			self.snakeRow, 
 			self.snakeCol,
-			self.snakeSetColor,
-			self.snakeUnsetColor,
 			self.snakeDirection,
-			self.movingInterval
 		);
-		self.snake.create();*/
+		self.createSnake(self.snake.body.currentRow, self.snake.body.currentCol);
 
 		// Creating apple
 		self.apple = new Apple (
@@ -110,7 +107,64 @@ function Game() {
 				break;
 		}
 	}
+
+	// Creating snake
+	this.createSnake = function(row, col) {
+		self.setCell(row, col, self.snakeSetColor);
+		self.movingInterval = setInterval(
+			() => {self.move()}, 
+			self.timeInterval
+		);
+	}
 	
+	// Making snake move
+	this.move = function() {
+
+		// Unsetting previous position
+		self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, self.snakeUnsetColor);
+
+		// Reading direction
+		switch (self.snake.direction) {
+			case 'ArrowUp':
+				self.snake.body.currentRow--;
+				break;
+			case 'ArrowDown':
+				self.snake.body.currentRow++;
+				break;
+			case 'ArrowLeft':
+				self.snake.body.currentCol--;
+				break;
+			case 'ArrowRight':
+				self.snake.body.currentCol++;
+				break;
+		}
+		
+		// Snake getting upper and bottom borders => move continues 
+		if (self.snake.body.currentRow < 1) {
+			self.snake.body.currentRow = self.rowQuantity;
+		} 
+		else if (self.snake.body.currentRow > self.rowQuantity) {
+			self.snake.body.currentRow = 1;
+		}
+
+		// Snake getting left and right borders => move continues
+		if (self.snake.body.currentCol < 1) {
+			self.snake.body.currentCol = self.colQuantity;
+		} 
+		else if (self.snake.body.currentCol > self.colQuantity) {
+			self.snake.body.currentCol = 1;
+		}
+
+		// End? => stop moving, else set next cell
+		if (self.getCell(self.snake.body.currentRow, self.snake.body.currentCol) == "green") {
+			// clearInterval(self.movingInterval);
+			// alert('Game is over');
+		}
+		else {
+			self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, self.snakeSetColor);
+		}
+	}
+
 	// Apple position randomizer
 	function randomIntFromInterval(min, max) {
 
@@ -129,8 +183,8 @@ function Game() {
 	}
 
 	// Translates direction from key to snake
-/*	changeSnakeDirection(arrowKeyDirection) {
-		this.snake.direction = arrowKeyDirection;
-	}*/
+	this.changeSnakeDirection = function(arrowKeyDirection) {
+		self.snake.direction = arrowKeyDirection;
+	}
 }
 
