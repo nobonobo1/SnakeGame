@@ -1,4 +1,8 @@
 
+//
+// Game class
+//
+
 function Game() {
 
 	var self = this;
@@ -138,7 +142,7 @@ function Game() {
 				self.snake.body.currentCol++;
 				break;
 		}
-		
+
 		// Snake getting upper and bottom borders => move continues 
 		if (self.snake.body.currentRow < 1) {
 			self.snake.body.currentRow = self.rowQuantity;
