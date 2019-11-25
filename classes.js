@@ -40,6 +40,6 @@ function Snake(row, col, direction) {
 function Apple(row, col) {
 
 	// Apple settings:
-	this.body = {appleRow: row,appleCol: col}
+	this.body = {appleRow: row, appleCol: col}
 }
 

@@ -9,7 +9,7 @@ window.onload = function() {
 	document.onkeydown = function(event)
 	{
 		// Handling keydown if arrow keys are downed, pass if other keys
-		var arr = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+		var arr = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 		if (arr.includes(event.key))
 		{
 			// game.changeSnakeDirection(event.key);

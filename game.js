@@ -8,23 +8,20 @@ function Game() {
 	var self = this;
 
 	// Initial matrix settings:
-	this.matrixName = 'matrix';
+	this.matrixName = "matrix";
 	this.rowQuantity = 20;
 	this.colQuantity = 20;
+	var cellType = {"empty":"empty", "snake":"snake", "apple":"apple"};
 
 	// Initial snake settings:
 	this.snakeRow = 1;
 	this.snakeCol = 1;
-	this.snakeSetColor = 'green';
-	this.snakeUnsetColor = 'clearGreen';
-	this.snakeDirection = 'ArrowRight';
-	this.timeInterval = 250;
+	this.snakeDirection = "ArrowRight";
+	this.timeInterval = 225;
 
 	// Initial apple settings:
 	this.appleRow = randomIntFromInterval(1, this.rowQuantity);
 	this.appleCol = randomIntFromInterval(1, this.colQuantity);
-	this.appleSetColor = 'red';
-	this.appleUnsetColor = 'clearRed';
 
 	// Creating field, snake and apple
 	this.create = function() {
@@ -53,7 +50,6 @@ function Game() {
 		self.createApple(self.apple.body.appleRow, self.apple.body.appleCol);
 	}
 	
-
 	// Returns cell index in matrix array by given coordinates
 	function getCoord(row, col) {
 
@@ -67,54 +63,51 @@ function Game() {
 		var cellIndex = getCoord(row, col);
 		var cell = $(self.matrix.matrixID).find("div").eq(cellIndex);
 
-		// has class == 'snake' => return 'green'
-		// has class == 'apple' => return 'red'
-		// has class == 'empty' => return 'empty'
-		if (cell.hasClass('snake')) {
-			return 'green';
+		// has class == "snake" => return "snake"
+		// has class == "apple" => return "apple"
+		// has class == "empty" => return "empty"
+		if (cell.hasClass("snake")) {
+			return "snake";
 		}
-		else if (cell.hasClass('apple')) {
-			return 'red';
+		else if (cell.hasClass("apple")) {
+			return "apple";
 		}
-		else if (cell.hasClass('empty')) {
-			return 'empty';
+		else if (cell.hasClass("empty")) {
+			return "empty";
 		}
 	}
 
-	// Fills and unfills cell with color chosen
-	this.setCell = function(row, col, color) {
+	// Fills and unfills cell with type chosen
+	this.setCell = function(row, col, type) {
 
 		// Selecting a cell from matrix
 		var cellIndex = getCoord(row, col);
 		var cell = $(self.matrix.matrixID).find("div").eq(cellIndex);
 
-		// color == 'red' => set class 'apple'
-		// color == 'clearRed' => remove class 'apple'
-		// color == 'green' => set class 'snake'
-		// color == 'clearGreen' => remove class 'snake'
-		switch (color) {
-			case 'red':
-				cell.removeClass('empty');
-				cell.addClass('apple');
+		// type == "snake" => set class "snake"
+		// type == "empty" => set class "empty"
+		// type == "apple" => set class "apple"
+		switch (type) {
+			case 'snake':
+				cell.removeClass("apple");
+				cell.removeClass("empty");
+				cell.addClass("snake");
 				break;
-			case 'clearRed':
-				cell.removeClass('apple');
-				cell.addClass('snake');
+			case 'empty':
+				cell.removeClass("apple");
+				cell.removeClass("snake");
+				cell.addClass("empty");
 				break;
-			case 'green':
-				cell.removeClass('empty');
-				cell.addClass('snake');
-				break;
-			case 'clearGreen':
-				cell.removeClass('snake');
-				cell.addClass('empty');
+			case 'apple':
+				cell.removeClass("empty");
+				cell.addClass("apple");
 				break;
 		}
 	}
 
-	// Creating snake
+	// Creating snake and setting moving interval
 	this.createSnake = function(row, col) {
-		self.setCell(row, col, self.snakeSetColor);
+		self.setCell(row, col, cellType["snake"]);
 		self.movingInterval = setInterval(
 			() => {self.move()}, 
 			self.timeInterval
@@ -125,20 +118,20 @@ function Game() {
 	this.move = function() {
 
 		// Unsetting previous position
-		self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, self.snakeUnsetColor);
+		self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, cellType["empty"]);
 
 		// Reading direction
 		switch (self.snake.direction) {
-			case 'ArrowUp':
+			case "ArrowUp":
 				self.snake.body.currentRow--;
 				break;
-			case 'ArrowDown':
+			case "ArrowDown":
 				self.snake.body.currentRow++;
 				break;
-			case 'ArrowLeft':
+			case "ArrowLeft":
 				self.snake.body.currentCol--;
 				break;
-			case 'ArrowRight':
+			case "ArrowRight":
 				self.snake.body.currentCol++;
 				break;
 		}
@@ -160,9 +153,9 @@ function Game() {
 		}
 
 		// End? => stop moving, else set next cell
-		if (self.getCell(self.snake.body.currentRow, self.snake.body.currentCol) == "green") {
-			// clearInterval(self.movingInterval);
-			// alert('Game is over');
+		if (self.getCell(self.snake.body.currentRow, self.snake.body.currentCol) == "apple") {
+			clearInterval(self.movingInterval);
+			alert("Game is over");
 		}
 		else {
 			self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, self.snakeSetColor);
@@ -179,7 +172,7 @@ function Game() {
 	this.createApple = function(row, col) {
 
 		// Set new apple if free space found
-		while (self.getCell(row, col) != 'empty') {
+		while (self.getCell(row, col) != "empty") {
 			row = randomIntFromInterval(1, self.rowQuantity);
 			col = randomIntFromInterval(1, self.colQuantity);
 		}
