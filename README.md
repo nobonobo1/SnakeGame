@@ -1,6 +1,6 @@
 # SnakeGame
 
-There are three branches:
+<b>There are three branches:</b>
 
 Master: only apples are placed on the playing field
 
@@ -10,7 +10,7 @@ OldBranch: working version
 
 
 
-Classic snake game
+<b>Classic snake game</b>
 
 Controls: arrows
 
