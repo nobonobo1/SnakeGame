@@ -26,14 +26,18 @@ function Matrix(matrixName, rows, cols) {
 // Snake class
 //
 
-function Snake(bodyRow, bodyCol, direction) {
+function Snake(bodyRow, bodyCol, direction, length) {
 
+	this.body = [];
 	// Snake settings:
-	this.body = [
+	for (i = 0; i < length; i++) {
+		this.body.push({row: bodyRow, col: bodyCol - i});
+	}
+	/*this.body = [
 		{row: bodyRow, col: bodyCol},
 		{row: bodyRow, col: bodyCol-1},
 		{row: bodyRow, col: bodyCol-2}
-	];
+	];*/
 	this.direction = direction;
 }
 
