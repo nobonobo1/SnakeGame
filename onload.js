@@ -6,19 +6,21 @@ window.onload = function() {
 	game.create();
 
 	// Handling keydown
-/*	document.onkeydown = function(event)
+	document.onkeydown = function(event)
 	{
 		// Handling keydown if arrow keys are downed, pass if other keys
-		var arr = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+		var arr = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 		if (arr.includes(event.key))
 		{
-			game.changeSnakeDirection(event.key);
+			// game.changeSnakeDirection(event.key);
+			game.snake.direction = event.key;
+			console.log(event.key);
 		} 
 		else
 		{
 			//Pass
 			console.log(event.key);
 		}
-	}*/
+	}
 }
 
