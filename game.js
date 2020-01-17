@@ -158,7 +158,7 @@ function Game() {
 			alert("Game is over");
 		}
 		else {
-			self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, self.snakeSetColor);
+			self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, cellType["snake"]);
 		}
 	}
 
@@ -176,7 +176,7 @@ function Game() {
 			row = randomIntFromInterval(1, self.rowQuantity);
 			col = randomIntFromInterval(1, self.colQuantity);
 		}
-		self.setCell(row, col, self.appleSetColor);
+		self.setCell(row, col, cellType["apple"]);
 	}
 
 	// Translates direction from key to snake
