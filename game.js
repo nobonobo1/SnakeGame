@@ -15,8 +15,8 @@ function Game() {
 
 	// Initial snake settings:
 	this.snakeRow = 1;
-	this.snakeCol = 1;
-	this.snakeDirection = "ArrowRight";
+	this.snakeCol = 3;
+	this.snakeDirection = "ArrowRight";	
 	this.timeInterval = 225;
 
 	// Initial apple settings:
@@ -40,7 +40,7 @@ function Game() {
 			self.snakeCol,
 			self.snakeDirection,
 		);
-		self.createSnake(self.snake.body.currentRow, self.snake.body.currentCol);
+		self.createSnake(self.snake.body[0].row, self.snake.body[0].col);
 
 		// Creating apple
 		self.apple = new Apple (
@@ -107,7 +107,13 @@ function Game() {
 
 	// Creating snake and setting moving interval
 	this.createSnake = function(row, col) {
-		self.setCell(row, col, cellType["snake"]);
+		self.snake.body.forEach(
+			snakePart => self.setCell(
+				snakePart.row, 
+				snakePart.col, 
+				cellType["snake"]
+			)
+		);
 		self.movingInterval = setInterval(
 			() => {self.move()}, 
 			self.timeInterval
@@ -117,48 +123,78 @@ function Game() {
 	// Making snake move
 	this.move = function() {
 
-		// Unsetting previous position
-		self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, cellType["empty"]);
+		// Unsetting last bodypart at field
+		self.setCell(
+			self.snake.body[self.snake.body.length-1].row, 
+			self.snake.body[self.snake.body.length-1].col, 
+			cellType["empty"]
+		);
 
-		// Reading direction
-		switch (self.snake.direction) {
-			case "ArrowUp":
-				self.snake.body.currentRow--;
-				break;
-			case "ArrowDown":
-				self.snake.body.currentRow++;
-				break;
-			case "ArrowLeft":
-				self.snake.body.currentCol--;
-				break;
-			case "ArrowRight":
-				self.snake.body.currentCol++;
-				break;
+		// Deleting last bodypart
+		self.snake.body.pop();
+		
+		// Adding head bodypart to first place
+		if (self.snake.direction == "ArrowUp") {
+			self.snake.body.unshift(
+				{
+					row: self.snake.body[0].row - 1,
+					col: self.snake.body[0].col
+				}
+			);
+		}
+		else if (self.snake.direction == "ArrowDown") {
+			self.snake.body.unshift(
+				{
+					row: self.snake.body[0].row + 1,
+					col: self.snake.body[0].col
+				}
+			);
+		}
+		else if (self.snake.direction == "ArrowLeft") {
+			self.snake.body.unshift(
+				{
+					row: self.snake.body[0].row,
+					col: self.snake.body[0].col - 1
+				}
+			);
+		}
+		else if (self.snake.direction == "ArrowRight") {
+			self.snake.body.unshift(
+				{
+					row: self.snake.body[0].row,
+					col: self.snake.body[0].col + 1
+				}
+			);
+		}
+		else {
+			//Pass
+			console.log('Snake direction' + self.snake.direction);
+			console.log('Previous snake direction' + snakePreviousDirection);
 		}
 
-		// Snake getting upper and bottom borders => move continues 
-		if (self.snake.body.currentRow < 1) {
-			self.snake.body.currentRow = self.rowQuantity;
+		// Snake is getting upper and bottom borders => move continues 
+		if (self.snake.body[0].row < 1) {
+			self.snake.body[0].row = self.rowQuantity;
 		} 
-		else if (self.snake.body.currentRow > self.rowQuantity) {
-			self.snake.body.currentRow = 1;
+		else if (self.snake.body[0].row > self.rowQuantity) {
+			self.snake.body[0].row = 1;
 		}
 
-		// Snake getting left and right borders => move continues
-		if (self.snake.body.currentCol < 1) {
-			self.snake.body.currentCol = self.colQuantity;
+		// Snake is getting left and right borders => move continues
+		if (self.snake.body[0].col < 1) {
+			self.snake.body[0].col = self.colQuantity;
 		} 
-		else if (self.snake.body.currentCol > self.colQuantity) {
-			self.snake.body.currentCol = 1;
+		else if (self.snake.body[0].col > self.colQuantity) {
+			self.snake.body[0].col = 1;
 		}
 
 		// End? => stop moving, else set next cell
-		if (self.getCell(self.snake.body.currentRow, self.snake.body.currentCol) == "apple") {
+		if (self.getCell(self.snake.body[0].row, self.snake.body[0].col) == "apple") {
 			clearInterval(self.movingInterval);
 			alert("Game is over");
 		}
 		else {
-			self.setCell(self.snake.body.currentRow, self.snake.body.currentCol, cellType["snake"]);
+			self.setCell(self.snake.body[0].row, self.snake.body[0].col, cellType["snake"]);
 		}
 	}
 
@@ -181,7 +217,12 @@ function Game() {
 
 	// Translates direction from key to snake
 	this.changeSnakeDirection = function(arrowKeyDirection) {
-		self.snake.direction = arrowKeyDirection;
+		if (self.snake.direction != arrowKeyDirection) {
+			self.snake.direction = arrowKeyDirection;
+		}
+		else {
+			console.log('Same way');
+		}
 	}
 }
 
